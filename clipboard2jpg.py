@@ -33,30 +33,21 @@ def pic_para(m):
 	print '5 = CMYK'
 	print '6 = YCbCr'
 	print '7 = 32bit Pixel'
-	mAlt = m
+	mOld = m
 	m = int(raw_input('Mode: '))
-	if m == 1:
-		m = '1'
-	elif m == 2:
-		m = 'L'
-	elif m == 3:
-		m = 'RGB'
-	elif m == 4:
-		m = 'RGBA'
-	elif m == 5:
-		m = 'CMYK'
-	elif m == 6:
-		m = 'YCbCr'
-	elif m == 7:
-		m = 'I'
-	else:
-		m = mAlt
-	return m, q
+	menu_options = { 1 : '1',
+			2 : 'L',
+			3 : 'RGB',
+			4 : 'RGBA',
+			5 : 'CMYK',
+			6 : 'YCbCr',
+			7 : 'I' }
+	return menu_options.get(m, mOld), q
 
 def main():
 	filename = 'clipboard.jpg'
 	image = clipboard.get_image()
-	if (image == None):
+	if not image:
 		print 'Clipboard is empty! Please copy a picture to the clipboard and then restart the script again.'
 	else:
 		r = False 
@@ -72,12 +63,12 @@ def main():
 		mp = round(x * y / 1000000.0, 1)
 		m = image.mode
 		print 'Clipboard-Information:',
-		print 'resolution = ' + str(x) + ' x ' + str(y) + ' (' + str(mp) + ' MP), mode = ' + m
+		print 'resolution = {} x {} ({} MP), mode = {}'.format(x, y, mp, m)
 		print
 		print '!!! Changing the resolution is time-consuming !!! Resolution higher 6000 x 4000 (24MP) can cause a abend!'
 		print
-		print '0 = Auto processing (Resolution = ' + str(x) + ' x ' + str(y) + ', quality = 95%, mode = ' + m + ')'
-		print '1 = Same resolution (' + str(x) + ' x ' + str(y) + ')'
+		print '0 = Auto processing (Resolution = {} x {}), quality = 95%, mode = {}'.format(x, y, m)
+		print '1 = Same resolution ({} x {})'.format(x, y)
 		print '2 = Define resolution'
 		print '3 = 3MP (2048 x 1536)'
 		print '5 = 5MP (2592 x 1936)'
@@ -151,7 +142,7 @@ def main():
 			print 'Cancel: ' + str(o) + ' is no valid input.'
 			sys.exit()
 		print 'Completed! Now you can open the picture and press Action > "Save Image ..." to get a copy to your photo gallery.'
-		print 'Resolution = ' + str(x) + ' x ' + str(y) + ', quality = {0:.0f}'.format(q*100) + '%, mode = ' + m + ',',
+		print 'Resolution = {} x {}, quality = {:.0f}%, mode = {}'.format(x, y, q*100, m),
 		info = os.stat(filename)
 		size = info.st_size
 		if (size > 1048576):
